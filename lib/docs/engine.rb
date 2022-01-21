@@ -8,7 +8,6 @@ module ::Docs
       Discourse::Application.routes.append do
         mount ::Docs::Engine, at: '/how-to'
         get '/knowledge-explorer', to: redirect("/how-to")
-        get '/docs', to: redirect("/how-to")
       end
     end
   end
