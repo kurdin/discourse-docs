@@ -50,7 +50,7 @@ acceptance("Docs", function (needs) {
   });
 
   test("selecting a category", async function (assert) {
-    await visit("/docs");
+    await visit("/how-to");
     assert.equal(count(".docs-category.selected"), 0);
 
     await click(".docs-item.docs-category");
