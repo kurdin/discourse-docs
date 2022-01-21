@@ -13,7 +13,7 @@ acceptance("Docs", function (needs) {
   });
 
   needs.pretender((server, helper) => {
-    server.get("/docs.json", (request) => {
+    server.get("/how-to.json", (request) => {
       if (request.queryParams.category === "1") {
         const fixture = JSON.parse(JSON.stringify(docsFixtures));
 

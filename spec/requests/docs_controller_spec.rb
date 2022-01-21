@@ -18,7 +18,7 @@ describe Docs::DocsController do
   describe 'docs data' do
     context 'when any user' do
       it 'should return the right response' do
-        get '/docs.json'
+        get '/how-to.json'
 
         expect(response.status).to eq(200)
 
@@ -31,7 +31,7 @@ describe Docs::DocsController do
       end
 
       it 'should return a topic count' do
-        get '/docs.json'
+        get '/how-to.json'
 
         json = response.parsed_body
         topic_count = json['topic_count']
@@ -50,7 +50,7 @@ describe Docs::DocsController do
       end
 
       it 'should not show topics in private categories without permissions' do
-        get '/docs.json'
+        get '/how-to.json'
 
         json = JSON.parse(response.body)
         topics = json['topics']['topic_list']['topics']
@@ -62,7 +62,7 @@ describe Docs::DocsController do
         admin = Fabricate(:admin)
         sign_in(admin)
 
-        get '/docs.json'
+        get '/how-to.json'
 
         json = JSON.parse(response.body)
         topics = json['topics']['topic_list']['topics']
@@ -76,7 +76,7 @@ describe Docs::DocsController do
       fab!(:tag3) { Fabricate(:tag, topics: [topic], name: 'test3') }
 
       it 'should return a list filtered by tag' do
-        get '/docs.json?tags=test'
+        get '/how-to.json?tags=test'
 
         expect(response.status).to eq(200)
 
@@ -87,7 +87,7 @@ describe Docs::DocsController do
       end
 
       it 'should properly filter with more than two tags' do
-        get '/docs.json?tags=test%7ctest2%7ctest3'
+        get '/how-to.json?tags=test%7ctest2%7ctest3'
 
         expect(response.status).to eq(200)
 
@@ -109,7 +109,7 @@ describe Docs::DocsController do
       end
 
       it 'should return a list filtered by category' do
-        get "/docs.json?category=#{category2.id}"
+        get "/how-to.json?category=#{category2.id}"
 
         expect(response.status).to eq(200)
 
@@ -122,7 +122,7 @@ describe Docs::DocsController do
       end
 
       it 'ignores category filter when incorrect argument' do
-        get "/docs.json?category=hack"
+        get "/how-to.json?category=hack"
 
         expect(response.status).to eq(200)
 
@@ -139,7 +139,7 @@ describe Docs::DocsController do
     context 'when ordering results' do
       context 'by title' do
         it 'should return the list ordered descending' do
-          get "/docs.json?order=title"
+          get "/how-to.json?order=title"
 
           expect(response.status).to eq(200)
 
@@ -151,7 +151,7 @@ describe Docs::DocsController do
         end
 
         it 'should return the list ordered ascending with an additional parameter' do
-          get "/docs.json?order=title&ascending=true"
+          get "/how-to.json?order=title&ascending=true"
 
           expect(response.status).to eq(200)
 
@@ -169,7 +169,7 @@ describe Docs::DocsController do
         end
 
         it 'should return the list ordered descending' do
-          get "/docs.json?order=activity"
+          get "/how-to.json?order=activity"
 
           expect(response.status).to eq(200)
 
@@ -181,7 +181,7 @@ describe Docs::DocsController do
         end
 
         it 'should return the list ordered ascending with an additional parameter' do
-          get "/docs.json?order=activity&ascending=true"
+          get "/how-to.json?order=activity&ascending=true"
 
           expect(response.status).to eq(200)
 
@@ -211,7 +211,7 @@ describe Docs::DocsController do
       end
 
       it 'should correctly filter topics' do
-        get "/docs.json?search=banana"
+        get "/how-to.json?search=banana"
 
         expect(response.status).to eq(200)
 
@@ -225,7 +225,7 @@ describe Docs::DocsController do
 
         expect(topics.size).to eq(2)
 
-        get "/docs.json?search=walk"
+        get "/how-to.json?search=walk"
 
         json = JSON.parse(response.body)
         topics = json['topics']['topic_list']['topics']
@@ -239,13 +239,13 @@ describe Docs::DocsController do
       let!(:non_ke_topic) { Fabricate(:topic) }
 
       it 'should correctly grab the topic' do
-        get "/docs.json?topic=#{topic.id}"
+        get "/how-to.json?topic=#{topic.id}"
 
         expect(response.parsed_body['topic']['id']).to eq(topic.id)
       end
 
       it 'should get topics matching a selected docs tag or category' do
-        get "/docs.json?topic=#{non_ke_topic.id}"
+        get "/how-to.json?topic=#{non_ke_topic.id}"
 
         expect(response.parsed_body['topic']).to be_blank
       end
@@ -253,7 +253,7 @@ describe Docs::DocsController do
       it 'should return a docs topic when only tags are added to settings' do
         SiteSetting.docs_categories = nil
 
-        get "/docs.json?topic=#{topic.id}"
+        get "/how-to.json?topic=#{topic.id}"
 
         expect(response.parsed_body['topic']['id']).to eq(topic.id)
       end
@@ -261,7 +261,7 @@ describe Docs::DocsController do
       it 'should return a docs topic when only categories are added to settings' do
         SiteSetting.docs_tags = nil
 
-        get "/docs.json?topic=#{topic.id}"
+        get "/how-to.json?topic=#{topic.id}"
 
         expect(response.parsed_body['topic']['id']).to eq(topic.id)
       end
